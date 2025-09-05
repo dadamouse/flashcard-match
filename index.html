@@ -30,7 +30,12 @@
       color: #2c3e50;
     }
 
-    #muteBtn {
+    #btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    #muteBtn, #replayBtn {
       font-size: 20px;
       background: none;
       border: none;
@@ -64,7 +69,7 @@
       border: 2px solid #a5d6a7;
       color: #2c3e50;
       font-size: 14px;
-      height: 70px;             /* ✅ 固定高度 */
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -75,7 +80,6 @@
       user-select: none;
       padding: 5px;
 
-      /* ✅ 允許換行，不會跑版 */
       white-space: normal;
       word-wrap: break-word;
       overflow: hidden;
@@ -107,7 +111,10 @@
 <body>
   <header>
     <h1>Travel Vocab Match</h1>
-    <button id="muteBtn">🔊</button>
+    <div id="btns">
+      <button id="muteBtn">🔊</button>
+      <button id="replayBtn">🔄</button>
+    </div>
   </header>
 
   <div id="score">Score: 0</div>
@@ -121,7 +128,7 @@
     let allWords = [];
     let pool = [];
     let activeWords = [];
-    const MAX_ACTIVE = 6;
+    const MAX_ACTIVE = 10;
 
     let score = 0;
     let isMuted = false;
@@ -129,6 +136,7 @@
 
     const scoreDisplay = document.getElementById("score");
     const muteBtn = document.getElementById("muteBtn");
+    const replayBtn = document.getElementById("replayBtn");
     const leftCol = document.getElementById("left");
     const rightCol = document.getElementById("right");
     const message = document.getElementById("message");
@@ -138,6 +146,33 @@
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
+    }
+
+    function saveProgress() {
+      const progress = {
+        score,
+        pool,
+        activeWords
+      };
+      localStorage.setItem("travelVocabProgress", JSON.stringify(progress));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem("travelVocabProgress");
+      if (saved) {
+        try {
+          const { score: s, pool: p, activeWords: a } = JSON.parse(saved);
+          score = s;
+          pool = p;
+          activeWords = a;
+          scoreDisplay.innerText = "Score: " + score;
+          return true;
+        } catch (e) {
+          console.error("載入進度失敗", e);
+          return false;
+        }
+      }
+      return false;
     }
 
     function renderBoard() {
@@ -171,6 +206,7 @@
     function updateScore(points) {
       score += points;
       scoreDisplay.innerText = "Score: " + score;
+      saveProgress();
     }
 
     function speakWord(word) {
@@ -222,6 +258,7 @@
           } else {
             renderBoard();
           }
+          saveProgress();
         }, 1000);
 
       } else {
@@ -243,7 +280,12 @@
       muteBtn.textContent = isMuted ? "🔇" : "🔊";
     });
 
-    // 🚀 載入單字檔
+    replayBtn.addEventListener("click", () => {
+      localStorage.removeItem("travelVocabProgress");
+      location.reload(); // 重新載入頁面
+    });
+
+    // 🚀 初始化
     fetch("travel_words.txt")
       .then(res => res.text())
       .then(text => {
@@ -251,8 +293,12 @@
           const [en, def] = line.split(",");
           return { en: en.trim(), def: def.trim() };
         });
-        pool = [...allWords];
-        activeWords = pool.splice(0, MAX_ACTIVE);
+
+        if (!loadProgress()) {
+          pool = [...allWords];
+          activeWords = pool.splice(0, MAX_ACTIVE);
+        }
+
         renderBoard();
       })
       .catch(err => {
