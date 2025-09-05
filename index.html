@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: sans-serif;
-      background: #f0f8ff;
+      font-family: "Segoe UI", sans-serif;
+      background: #f9fdfb;
       margin: 0;
-      padding: 10px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -17,9 +17,16 @@
 
     h1 {
       font-size: 22px;
-      margin: 10px 0;
+      margin: 10px 0 5px;
       color: #2c3e50;
       text-align: center;
+    }
+
+    #score {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #00796b;
+      font-weight: bold;
     }
 
     #game-board {
@@ -27,48 +34,55 @@
       justify-content: center;
       width: 100%;
       max-width: 600px;
-      gap: 10px;
+      gap: 20px;
     }
 
     .column {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .card {
-      background: #3498db;
-      color: white;
+      background: #e8f5e9;
+      border: 2px solid #a5d6a7;
+      color: #2c3e50;
       font-size: 16px;
-      padding: 15px;
+      padding: 12px;
       text-align: center;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.25s;
       user-select: none;
     }
 
+    .card:hover {
+      background: #dcedc8;
+    }
+
     .card.selected {
-      background: #f1c40f;
-      color: black;
+      background: #fff9c4;
+      border-color: #fbc02d;
     }
 
     .card.matched {
-      background: #2ecc71;
-      color: white;
+      background: #c8e6c9;
+      border-color: #66bb6a;
+      color: #388e3c;
       cursor: default;
     }
 
     #message {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 18px;
-      color: #27ae60;
+      color: #43a047;
     }
   </style>
 </head>
 <body>
   <h1>Vocab Match</h1>
+  <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="left" class="column"></div>
     <div id="right" class="column"></div>
@@ -76,7 +90,7 @@
   <div id="message"></div>
 
   <script>
-    const words = [
+    const allWords = [
       { en: "Considering", zh: "考慮中" },
       { en: "Wrangling", zh: "爭論中" },
       { en: "Cogitating", zh: "深思中" },
@@ -86,10 +100,24 @@
       { en: "Enchanting", zh: "迷人中" },
       { en: "Vibing", zh: "感受中" },
       { en: "Unravelling", zh: "解開中" },
-      { en: "Processing", zh: "處理中" }
+      { en: "Processing", zh: "處理中" },
+      { en: "Transmuting", zh: "轉變中" },
+      { en: "Compacting conversation", zh: "縮減對話中" },
+      { en: "Whirring", zh: "嗡嗡作響中" },
+      { en: "Wizarding", zh: "施法中" },
+      { en: "Flibbertigibbeting", zh: "胡言亂語中" },
+      { en: "Manifesting", zh: "顯現中" },
+      { en: "Actioning", zh: "行動中" },
+      { en: "Puttering", zh: "閒逛中" }
     ];
 
-    // 打亂陣列
+    let pool = [...allWords];  // 剩餘單字池
+    let activeWords = [];      // 畫面上的單字
+    const MAX_ACTIVE = 10;
+
+    let score = 0;
+    const scoreDisplay = document.getElementById("score");
+
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
@@ -100,18 +128,26 @@
 
     let leftSelected = null;
     let rightSelected = null;
-    let matchedCount = 0;
 
-    function createBoard() {
-      const leftCards = shuffle([...words]);
-      const rightCards = shuffle([...words]);
+    function initGame() {
+      // 一開始先抽出 10 組
+      activeWords = pool.splice(0, MAX_ACTIVE);
+      renderBoard();
+    }
+
+    function renderBoard() {
+      leftCol.innerHTML = "";
+      rightCol.innerHTML = "";
+
+      const leftCards = shuffle([...activeWords]);
+      const rightCards = shuffle([...activeWords]);
 
       leftCards.forEach(w => {
         const card = document.createElement("div");
         card.classList.add("card");
         card.innerText = w.en;
-        card.dataset.word = w.en;
-        card.dataset.match = w.zh;
+        card.dataset.en = w.en;
+        card.dataset.zh = w.zh;
         card.addEventListener("click", () => selectCard(card, "left"));
         leftCol.appendChild(card);
       });
@@ -120,11 +156,16 @@
         const card = document.createElement("div");
         card.classList.add("card");
         card.innerText = w.zh;
-        card.dataset.word = w.zh;
-        card.dataset.match = w.en;
+        card.dataset.en = w.en;
+        card.dataset.zh = w.zh;
         card.addEventListener("click", () => selectCard(card, "right"));
         rightCol.appendChild(card);
       });
+    }
+
+    function updateScore(points) {
+      score += points;
+      scoreDisplay.innerText = "Score: " + score;
     }
 
     function selectCard(card, side) {
@@ -146,23 +187,49 @@
     }
 
     function checkMatch() {
-      if (leftSelected.dataset.match === rightSelected.dataset.word) {
+      const enWord = leftSelected.dataset.en;
+      const zhWord = rightSelected.dataset.zh;
+
+      if (leftSelected.dataset.zh === zhWord) {
+        // 正確配對
+        updateScore(10);
         leftSelected.classList.add("matched");
         rightSelected.classList.add("matched");
-        matchedCount++;
 
-        if (matchedCount === words.length) {
-          message.innerText = "🎉 All matched!";
-        }
+        setTimeout(() => {
+          // 移除畫面上的單字
+          activeWords = activeWords.filter(w => !(w.en === enWord && w.zh === zhWord));
+          leftSelected.remove();
+          rightSelected.remove();
+
+          // 如果還有單字池 → 補進來
+          if (pool.length > 0) {
+            const newWord = pool.shift();
+            activeWords.push(newWord);
+          }
+
+          // 檢查遊戲是否結束
+          if (activeWords.length === 0 && pool.length === 0) {
+            message.innerText = "🎉 All matched! Final Score: " + score;
+          } else {
+            renderBoard();
+          }
+        }, 400);
+
+      } else {
+        // 錯誤 → 還原並扣分
+        updateScore(-2);
+        setTimeout(() => {
+          leftSelected.classList.remove("selected");
+          rightSelected.classList.remove("selected");
+        }, 500);
       }
 
-      leftSelected.classList.remove("selected");
-      rightSelected.classList.remove("selected");
       leftSelected = null;
       rightSelected = null;
     }
 
-    createBoard();
+    initGame();
   </script>
 </body>
 </html>
