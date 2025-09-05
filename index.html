@@ -199,20 +199,20 @@
     }
 
     function checkMatch() {
-      const enWord = leftSelected.dataset.en;
-      const defWord = rightSelected.dataset.def;
+      const enWordLeft = leftSelected.dataset.en;
+      const enWordRight = rightSelected.dataset.en;
 
-      if (leftSelected.dataset.def === defWord) {
+      if (enWordLeft === enWordRight) {
         updateScore(10);
-        speakWord(enWord);
+        speakWord(enWordLeft);
 
-        pool = pool.filter(w => !(w.en === enWord));
+        pool = pool.filter(w => !(w.en === enWordLeft));
         leftSelected.remove();
         rightSelected.remove();
 
         if (replenishTimer) clearTimeout(replenishTimer);
         replenishTimer = setTimeout(() => {
-          activeWords = activeWords.filter(w => w.en !== enWord);
+          activeWords = activeWords.filter(w => w.en !== enWordLeft);
           if (pool.length > 0) {
             const newWord = pool.shift();
             activeWords.push(newWord);
