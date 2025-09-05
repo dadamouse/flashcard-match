@@ -115,5 +115,141 @@
   <div id="message"></div>
 
   <script>
-    // 🎯 6 組單字
-    const all
+    // 🎯 固定 6 組單字
+    const allWords = [
+      { en: "Considering", zh: "考慮中" },
+      { en: "Wrangling", zh: "爭論中" },
+      { en: "Cogitating", zh: "深思中" },
+      { en: "Moseying", zh: "漫步中" },
+      { en: "Enchanting", zh: "迷人中" },
+      { en: "Processing", zh: "處理中" }
+    ];
+
+    let remainingWords = [...allWords]; // 尚未完成的單字
+    let score = 0;
+    let isMuted = false;
+    let replenishTimer = null;
+
+    const scoreDisplay = document.getElementById("score");
+    const muteBtn = document.getElementById("muteBtn");
+    const leftCol = document.getElementById("left");
+    const rightCol = document.getElementById("right");
+    const message = document.getElementById("message");
+
+    let leftSelected = null;
+    let rightSelected = null;
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function renderBoard() {
+      leftCol.innerHTML = "";
+      rightCol.innerHTML = "";
+
+      const leftCards = shuffle([...remainingWords]);
+      const rightCards = shuffle([...remainingWords]);
+
+      leftCards.forEach(w => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerText = w.en;
+        card.dataset.en = w.en;
+        card.dataset.zh = w.zh;
+        card.addEventListener("click", () => selectCard(card, "left"));
+        leftCol.appendChild(card);
+      });
+
+      rightCards.forEach(w => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerText = w.zh;
+        card.dataset.en = w.en;
+        card.dataset.zh = w.zh;
+        card.addEventListener("click", () => selectCard(card, "right"));
+        rightCol.appendChild(card);
+      });
+    }
+
+    function updateScore(points) {
+      score += points;
+      scoreDisplay.innerText = "Score: " + score;
+    }
+
+    // 🔊 發音
+    function speakWord(word) {
+      if (isMuted) return;
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = "en-US";
+      speechSynthesis.speak(utterance);
+    }
+
+    function selectCard(card, side) {
+      if (card.classList.contains("matched")) return;
+
+      if (side === "left") {
+        if (leftSelected) leftSelected.classList.remove("selected");
+        leftSelected = card;
+        card.classList.add("selected");
+      } else {
+        if (rightSelected) rightSelected.classList.remove("selected");
+        rightSelected = card;
+        card.classList.add("selected");
+      }
+
+      if (leftSelected && rightSelected) {
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const enWord = leftSelected.dataset.en;
+      const zhWord = rightSelected.dataset.zh;
+
+      if (leftSelected.dataset.zh === zhWord) {
+        // ✅ 正確
+        updateScore(10);
+        speakWord(enWord);
+
+        // 從剩餘題庫移除
+        remainingWords = remainingWords.filter(w => !(w.en === enWord && w.zh === zhWord));
+
+        leftSelected.remove();
+        rightSelected.remove();
+
+        // 🕑 延遲 1 秒再補齊
+        if (replenishTimer) clearTimeout(replenishTimer);
+        replenishTimer = setTimeout(() => {
+          if (remainingWords.length === 0) {
+            message.innerText = "🎉 All matched! Final Score: " + score;
+          } else {
+            renderBoard();
+          }
+        }, 1000);
+
+      } else {
+        // ❌ 錯誤
+        updateScore(-2);
+        const l = leftSelected;
+        const r = rightSelected;
+        setTimeout(() => {
+          if (l) l.classList.remove("selected");
+          if (r) r.classList.remove("selected");
+        }, 400);
+      }
+
+      leftSelected = null;
+      rightSelected = null;
+    }
+
+    // 🔇 音效開關
+    muteBtn.addEventListener("click", () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? "🔇" : "🔊";
+    });
+
+    // 🚀 開始遊戲
+    renderBoard();
+  </script>
+</body>
+</html>
