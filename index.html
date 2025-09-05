@@ -111,8 +111,8 @@
       { en: "Puttering", zh: "閒逛中" }
     ];
 
-    let pool = [...allWords];  // 剩餘單字池
-    let activeWords = [];      // 畫面上的單字
+    let pool = [...allWords];
+    let activeWords = [];
     const MAX_ACTIVE = 10;
 
     let score = 0;
@@ -130,7 +130,6 @@
     let rightSelected = null;
 
     function initGame() {
-      // 一開始先抽出 10 組
       activeWords = pool.splice(0, MAX_ACTIVE);
       renderBoard();
     }
@@ -191,24 +190,21 @@
       const zhWord = rightSelected.dataset.zh;
 
       if (leftSelected.dataset.zh === zhWord) {
-        // 正確配對
+        // ✅ 正確配對
         updateScore(10);
         leftSelected.classList.add("matched");
         rightSelected.classList.add("matched");
 
         setTimeout(() => {
-          // 移除畫面上的單字
           activeWords = activeWords.filter(w => !(w.en === enWord && w.zh === zhWord));
           leftSelected.remove();
           rightSelected.remove();
 
-          // 如果還有單字池 → 補進來
           if (pool.length > 0) {
             const newWord = pool.shift();
             activeWords.push(newWord);
           }
 
-          // 檢查遊戲是否結束
           if (activeWords.length === 0 && pool.length === 0) {
             message.innerText = "🎉 All matched! Final Score: " + score;
           } else {
@@ -217,12 +213,12 @@
         }, 400);
 
       } else {
-        // 錯誤 → 還原並扣分
+        // ❌ 錯誤 → 還原成沒選
         updateScore(-2);
         setTimeout(() => {
           leftSelected.classList.remove("selected");
           rightSelected.classList.remove("selected");
-        }, 500);
+        }, 400);
       }
 
       leftSelected = null;
