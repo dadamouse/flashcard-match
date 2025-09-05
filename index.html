@@ -1,370 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Travel Vocab Match</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background: #f9fdfb;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<script>
+  let allWords = [];
+  let pool = [];
+  let activeWords = [];
+  const MAX_ACTIVE = 6;
+  const REQUIRED_CORRECT = 3;
 
-    header {
-      width: 100%;
-      max-width: 800px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+  let score = 0;
+  let isMuted = false;
+  let completed = 0;
 
-    h1 {
-      font-size: 22px;
-      margin: 0;
-      color: #2c3e50;
-    }
+  const scoreDisplay = document.getElementById("score");
+  const muteBtn = document.getElementById("muteBtn");
+  const replayBtn = document.getElementById("replayBtn");
+  const leftCol = document.getElementById("left");
+  const rightCol = document.getElementById("right");
+  const message = document.getElementById("message");
 
-    #btns {
-      display: flex;
-      gap: 10px;
-    }
+  const progressText = document.getElementById("progressText");
+  const progressFill = document.getElementById("progressFill");
 
-    #muteBtn, #replayBtn {
-      font-size: 20px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+  let leftSelected = null;
+  let rightSelected = null;
 
-    #score {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #00796b;
-      font-weight: bold;
-    }
+  // ===== Helper =====
+  function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
 
-    #progressText {
-      font-size: 16px;
-      margin-bottom: 5px;
-      color: #555;
-    }
+  function saveProgress() {
+    const data = {
+      allWords: allWords.map(w => ({ en: w.en, def: w.def, correctCount: w.correctCount || 0 })),
+      pool: pool.map(w => ({ en: w.en, def: w.def, correctCount: w.correctCount || 0 })),
+      activeWords: activeWords.map(w => ({ en: w.en, def: w.def, correctCount: w.correctCount || 0 })),
+      score,
+      completed
+    };
+    localStorage.setItem("travelVocabProgress", JSON.stringify(data));
+  }
 
-    #progressBar {
-      width: 100%;
-      max-width: 800px;
-      height: 15px;
-      background: #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-
-    #progressFill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #66bb6a, #43a047);
-      transition: width 0.3s;
-    }
-
-    #game-board {
-      display: flex;
-      justify-content: center;
-      width: 100%;
-      max-width: 800px;
-      gap: 20px;
-    }
-
-    .column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .card {
-      background: #e8f5e9;
-      border: 2px solid #a5d6a7;
-      color: #2c3e50;
-      font-size: 14px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.25s;
-      user-select: none;
-      padding: 5px;
-
-      white-space: normal;
-      word-wrap: break-word;
-      overflow: hidden;
-    }
-
-    .card:hover {
-      background: #dcedc8;
-    }
-
-    .card.selected {
-      background: #fff9c4;
-      border-color: #fbc02d;
-    }
-
-    .card.matched {
-      background: #c8e6c9;
-      border-color: #66bb6a;
-      color: #388e3c;
-      cursor: default;
-    }
-
-    #message {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #43a047;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Travel Vocab Match</h1>
-    <div id="btns">
-      <button id="muteBtn">🔊</button>
-      <button id="replayBtn">🔄</button>
-    </div>
-  </header>
-
-  <div id="score">Score: 0</div>
-  <div id="progressText">Completed: 0 / 0</div>
-  <div id="progressBar"><div id="progressFill"></div></div>
-
-  <div id="game-board">
-    <div id="left" class="column"></div>
-    <div id="right" class="column"></div>
-  </div>
-  <div id="message"></div>
-
-  <script>
-    let allWords = [];
-    let pool = [];
-    let activeWords = [];
-    const MAX_ACTIVE = 6;
-    const REQUIRED_CORRECT = 3; // ✅ 每個單字需答對 3 次
-
-    let score = 0;
-    let isMuted = false;
-    let completed = 0;
-
-    const scoreDisplay = document.getElementById("score");
-    const muteBtn = document.getElementById("muteBtn");
-    const replayBtn = document.getElementById("replayBtn");
-    const leftCol = document.getElementById("left");
-    const rightCol = document.getElementById("right");
-    const message = document.getElementById("message");
-
-    const progressText = document.getElementById("progressText");
-    const progressFill = document.getElementById("progressFill");
-
-    let leftSelected = null;
-    let rightSelected = null;
-
-    // ===== Helper =====
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
-
-    function saveProgress() {
-      localStorage.setItem("travelVocabProgress", JSON.stringify({
-        allWords,
-        pool,
-        activeWords,
-        score,
-        completed
-      }));
-    }
-
-    function loadProgress() {
-      const saved = localStorage.getItem("travelVocabProgress");
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          allWords = data.allWords;
-          pool = data.pool;
-          activeWords = data.activeWords;
-          score = data.score;
-          completed = data.completed;
-          scoreDisplay.innerText = "Score: " + score;
-          updateProgress();
-          return true;
-        } catch (e) {
-          console.error("載入進度失敗", e);
-        }
-      }
-      return false;
-    }
-
-    function renderBoard() {
-      leftCol.innerHTML = "";
-      rightCol.innerHTML = "";
-
-      const leftCards = shuffle([...activeWords]);
-      const rightCards = shuffle([...activeWords]);
-
-      leftCards.forEach(w => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.innerText = w.en;
-        card.dataset.en = w.en;
-        card.dataset.def = w.def;
-        card.addEventListener("click", () => selectCard(card, "left"));
-        leftCol.appendChild(card);
-      });
-
-      rightCards.forEach(w => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-        card.innerText = w.def;
-        card.dataset.en = w.en;
-        card.dataset.def = w.def;
-        card.addEventListener("click", () => selectCard(card, "right"));
-        rightCol.appendChild(card);
-      });
-    }
-
-    function updateScore(points) {
-      score += points;
-      scoreDisplay.innerText = "Score: " + score;
-      saveProgress();
-    }
-
-    function updateProgress() {
-      progressText.innerText = `Completed: ${completed} / ${allWords.length}`;
-      const percent = (completed / allWords.length) * 100;
-      progressFill.style.width = percent + "%";
-      saveProgress();
-    }
-
-    function speakWord(word) {
-      if (isMuted) return;
-      const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = "en-US";
-      speechSynthesis.speak(utterance);
-    }
-
-    function selectCard(card, side) {
-      if (card.classList.contains("matched")) return;
-
-      if (side === "left") {
-        if (leftSelected) leftSelected.classList.remove("selected");
-        leftSelected = card;
-        card.classList.add("selected");
-      } else {
-        if (rightSelected) rightSelected.classList.remove("selected");
-        rightSelected = card;
-        card.classList.add("selected");
-      }
-
-      if (leftSelected && rightSelected) {
-        checkMatch();
-      }
-    }
-
-    function checkMatch() {
-      const enWordLeft = leftSelected.dataset.en;
-      const enWordRight = rightSelected.dataset.en;
-
-      if (enWordLeft === enWordRight) {
-        // ✅ 正確
-        updateScore(10);
-        speakWord(enWordLeft);
-
-        const wordObj = allWords.find(w => w.en === enWordLeft);
-        wordObj.correctCount = (wordObj.correctCount || 0) + 1;
-
-        activeWords = activeWords.filter(w => w.en !== enWordLeft);
-        leftSelected.remove();
-        rightSelected.remove();
-
-        if (wordObj.correctCount >= REQUIRED_CORRECT) {
-          completed++;
-        } else {
-          // 30 秒後再回來
-          setTimeout(() => {
-            pool.push(wordObj);
-            if (activeWords.length < MAX_ACTIVE && pool.length > 0) {
-              const newWord = pool.shift();
-              activeWords.push(newWord);
-              renderBoard();
-              saveProgress();
-            }
-          }, 30000);
-        }
-
-        if (pool.length > 0 && activeWords.length < MAX_ACTIVE) {
-          const newWord = pool.shift();
-          activeWords.push(newWord);
-        }
-
-        if (activeWords.length === 0 && pool.length === 0) {
-          message.innerText = `🎉 All matched (3x)! Final Score: ${score}`;
-        } else {
-          renderBoard();
-        }
-
+  function loadProgress() {
+    const saved = localStorage.getItem("travelVocabProgress");
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        allWords = data.allWords;
+        pool = data.pool;
+        activeWords = data.activeWords;
+        score = data.score;
+        completed = data.completed;
+        scoreDisplay.innerText = "Score: " + score;
         updateProgress();
+        return true;
+      } catch (e) {
+        console.error("載入進度失敗", e);
+      }
+    }
+    return false;
+  }
 
+  function renderBoard() {
+    leftCol.innerHTML = "";
+    rightCol.innerHTML = "";
+
+    const leftCards = shuffle([...activeWords]);
+    const rightCards = shuffle([...activeWords]);
+
+    leftCards.forEach(w => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerText = w.en;
+      card.dataset.en = w.en;
+      card.dataset.def = w.def;
+      card.addEventListener("click", () => selectCard(card, "left"));
+      leftCol.appendChild(card);
+    });
+
+    rightCards.forEach(w => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerText = w.def;
+      card.dataset.en = w.en;
+      card.dataset.def = w.def;
+      card.addEventListener("click", () => selectCard(card, "right"));
+      rightCol.appendChild(card);
+    });
+  }
+
+  function updateScore(points) {
+    score += points;
+    scoreDisplay.innerText = "Score: " + score;
+    saveProgress();
+  }
+
+  function updateProgress() {
+    progressText.innerText = `Completed: ${completed} / ${allWords.length}`;
+    const percent = (completed / allWords.length) * 100;
+    progressFill.style.width = percent + "%";
+    saveProgress();
+  }
+
+  function speakWord(word) {
+    if (isMuted) return;
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = "en-US";
+    speechSynthesis.speak(utterance);
+  }
+
+  function selectCard(card, side) {
+    if (card.classList.contains("matched")) return;
+
+    if (side === "left") {
+      if (leftSelected) leftSelected.classList.remove("selected");
+      leftSelected = card;
+      card.classList.add("selected");
+    } else {
+      if (rightSelected) rightSelected.classList.remove("selected");
+      rightSelected = card;
+      card.classList.add("selected");
+    }
+
+    if (leftSelected && rightSelected) {
+      checkMatch();
+    }
+  }
+
+  function checkMatch() {
+    const enWordLeft = leftSelected.dataset.en;
+    const enWordRight = rightSelected.dataset.en;
+
+    if (enWordLeft === enWordRight) {
+      updateScore(10);
+      speakWord(enWordLeft);
+
+      const wordObj = allWords.find(w => w.en === enWordLeft);
+      wordObj.correctCount = (wordObj.correctCount || 0) + 1;
+
+      activeWords = activeWords.filter(w => w.en !== enWordLeft);
+      leftSelected.remove();
+      rightSelected.remove();
+
+      if (wordObj.correctCount >= REQUIRED_CORRECT) {
+        completed++;
       } else {
-        // ❌ 錯誤，只扣分，不移除
-        updateScore(-2);
-        const l = leftSelected;
-        const r = rightSelected;
+        // 30 秒後再回來
         setTimeout(() => {
-          if (l) l.classList.remove("selected");
-          if (r) r.classList.remove("selected");
-        }, 400);
+          pool.push(wordObj);
+          if (activeWords.length < MAX_ACTIVE && pool.length > 0) {
+            const newWord = pool.shift();
+            activeWords.push(newWord);
+            renderBoard();
+            saveProgress();
+          }
+        }, 30000);
       }
 
-      leftSelected = null;
-      rightSelected = null;
-      saveProgress();
+      if (pool.length > 0 && activeWords.length < MAX_ACTIVE) {
+        const newWord = pool.shift();
+        activeWords.push(newWord);
+      }
+
+      if (activeWords.length === 0 && pool.length === 0) {
+        message.innerText = `🎉 All matched (3x)! Final Score: ${score}`;
+      } else {
+        renderBoard();
+      }
+
+      updateProgress();
+    } else {
+      updateScore(-2);
+      const l = leftSelected;
+      const r = rightSelected;
+      setTimeout(() => {
+        if (l) l.classList.remove("selected");
+        if (r) r.classList.remove("selected");
+      }, 400);
     }
 
-    // ===== Buttons =====
-    muteBtn.addEventListener("click", () => {
-      isMuted = !isMuted;
-      muteBtn.textContent = isMuted ? "🔇" : "🔊";
-    });
+    leftSelected = null;
+    rightSelected = null;
+    saveProgress();
+  }
 
-    replayBtn.addEventListener("click", () => {
-      localStorage.removeItem("travelVocabProgress");
-      location.reload();
-    });
+  // ===== Buttons =====
+  muteBtn.addEventListener("click", () => {
+    isMuted = !isMuted;
+    muteBtn.textContent = isMuted ? "🔇" : "🔊";
+  });
 
-    // ===== Init =====
-    fetch("travel_words.txt")
-      .then(res => res.text())
-      .then(text => {
-        if (!loadProgress()) {
-          allWords = text.trim().split("\n").map(line => {
-            const [en, def] = line.split(",");
-            return { en: en.trim(), def: def.trim(), correctCount: 0 };
-          });
-          pool = [...allWords];
-          activeWords = pool.splice(0, MAX_ACTIVE);
-          completed = 0;
-        }
-        renderBoard();
-        updateProgress();
-      })
-      .catch(err => {
-        console.error("讀取 travel_words.txt 失敗", err);
-      });
-  </script>
-</body>
-</html>
+  replayBtn.addEventListener("click", () => {
+    localStorage.removeItem("travelVocabProgress");
+    location.reload();
+  });
+
+  // ===== Init =====
+  fetch("travel_words.txt")
+    .then(res => res.text())
+    .then(text => {
+      if (!loadProgress()) {
+        allWords = text.trim().split("\n").map(line => {
+          const [en, def] = line.split(",");
+          return { en: en.trim(), def: def.trim(), correctCount: 0 };
+        });
+        pool = [...allWords];
+        activeWords = pool.splice(0, MAX_ACTIVE);
+        completed = 0;
+        score = 0;
+      }
+      renderBoard();
+      updateProgress();
+    })
+    .catch(err => {
+      console.error("讀取 travel_words.txt 失敗", err);
+    });
+</script>
