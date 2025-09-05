@@ -1,0 +1,557 @@
+airport,A place where airplanes take off and land
+airline,A company that provides air travel services
+boarding pass,A document that allows a passenger to enter an airplane
+customs,The place where officials inspect luggage and goods when entering a country
+immigration,The process of entering and being checked by a country’s border control
+visa,An official document allowing entry into a foreign country
+passport,An official identification document required for international travel
+luggage,Bags and suitcases used for traveling
+carry-on,A small bag that passengers can bring onto the plane
+baggage claim,The area where passengers collect checked luggage after a flight
+souvenir,An item bought to remember a place or trip
+tourist,A person who is traveling for pleasure
+guidebook,A book with information about a city or country for travelers
+itinerary,A planned schedule for a trip
+hostel,A budget accommodation where travelers often share rooms
+hotel,A commercial establishment providing lodging to travelers
+resort,A place that offers lodging, meals, and activities for vacation
+guesthouse,A small house offering lodging for travelers
+bed and breakfast,A small lodging where breakfast is included
+campground,A place where people set up tents or park campers
+backpacker,A person traveling with minimal luggage, often on a budget
+traveler,A person who journeys from place to place
+tour guide,A person who leads and provides information to tourists
+map,A visual representation of an area used for navigation
+GPS,A system that helps travelers find directions using satellites
+landmark,A recognizable object or feature that identifies a location
+attraction,A place that draws visitors
+museum,A place where art, history, or science exhibits are shown
+gallery,A room or building displaying works of art
+monument,A structure built to honor a person or event
+statue,A carved or cast figure of a person or animal
+temple,A building used for religious worship
+church,A Christian place of worship
+mosque,A Muslim place of worship
+cathedral,A large and important church
+palace,A large residence for royalty
+castle,A fortified building or residence from the past
+ruins,The remains of an old structure or building
+market,A place where goods are bought and sold
+bazaar,A marketplace, often in Middle Eastern or Asian countries
+shopping mall,A large building with many shops
+street food,Food sold by vendors in outdoor settings
+restaurant,A place where meals are prepared and served
+café,A small restaurant, often serving coffee and snacks
+bar,A place that serves alcoholic drinks
+pub,A traditional drinking place, especially in the UK
+nightclub,A place with music and dancing, open late
+festival,A celebration with events, often cultural or religious
+parade,A public procession with music, floats, or costumes
+concert,A live music performance
+theater,A building where plays and shows are performed
+cinema,A place where movies are shown
+park,A public green area for recreation
+zoo,A place where animals are kept for public viewing
+aquarium,A place where aquatic animals are displayed
+beach,A sandy or pebbly area along the shore
+island,A piece of land surrounded by water
+mountain,A high natural elevation of the earth’s surface
+hill,A small natural elevation of land
+valley,An area of low land between hills or mountains
+lake,A large body of water surrounded by land
+river,A natural flowing body of water
+waterfall,A stream of water falling from a height
+bridge,A structure that connects two places over water or land
+harbor,A place where ships dock
+port,A town or city with a harbor for ships
+cruise,A vacation trip taken on a ship
+ferry,A boat that carries people or vehicles across water
+subway,An underground passenger train
+train,A vehicle that runs on tracks to transport people or goods
+tram,A rail vehicle that runs on city streets
+bus,A large motor vehicle carrying passengers
+taxi,A car with a driver for hire
+rideshare,A car service booked through an app
+car rental,A service that rents cars to travelers
+bike rental,A service that rents bicycles
+motorbike,A two-wheeled motor vehicle
+scooter,A small two-wheeled vehicle, sometimes electric
+shuttle,A vehicle that travels regularly between two points
+flight,A journey on an airplane
+delay,When transportation is later than scheduled
+cancellation,When a planned trip or flight is stopped
+check-in,The process of registering for a flight or hotel
+departure,The act of leaving
+arrival,The act of coming to a place
+gate,The entrance to board a plane
+terminal,A building at an airport for passengers
+security check,The inspection of passengers and luggage
+seat belt,A safety strap in vehicles or airplanes
+window seat,A seat next to the airplane window
+aisle seat,A seat next to the walkway in a plane or bus
+layover,A short stop between connecting flights
+jet lag,Fatigue caused by traveling across time zones
+time zone,A region with the same standard time
+currency,The money system of a country
+exchange rate,The value of one currency compared to another
+ATM,A machine for withdrawing money
+credit card,A plastic card used for payments
+debit card,A card linked directly to a bank account
+cash,Money in the form of bills and coins
+tip,Extra money given for service
+receipt,A written record of a payment
+invoice,A document requesting payment
+budget,A plan for managing money
+reservation,An arrangement to secure accommodation or a seat
+booking,The act of reserving travel, lodging, or tickets
+confirmation,A document verifying a reservation
+check-out,The process of leaving a hotel and paying the bill
+room service,Food or services delivered to a hotel room
+concierge,A hotel staff member who assists guests
+front desk,The reception area of a hotel
+lobby,The main entrance area of a hotel
+suite,A set of connected rooms in a hotel
+single room,A hotel room with one bed
+double room,A hotel room with two beds or a larger bed for two
+twin room,A hotel room with two separate single beds
+dormitory,A shared sleeping room, often in hostels
+amenities,Extra features or services in a hotel
+housekeeping,Hotel staff responsible for cleaning rooms
+checkout time,The specific time guests must leave a hotel
+late check-out,Permission to leave a hotel after the normal time
+no-show,A guest who does not arrive for their booking
+vacancy,Availability of rooms in a hotel
+overbooking,When more reservations are made than rooms available
+cancellation policy,The rules for canceling a reservation
+deposit,An advance payment to secure a booking
+all-inclusive,A service where meals and drinks are included in the price
+half-board,A hotel option including breakfast and one other meal
+full-board,A hotel option including all daily meals
+breakfast buffet,A self-service breakfast with many choices
+continental breakfast,A light breakfast with pastries, coffee, and juice
+mini-bar,A small fridge with drinks and snacks in a hotel room
+safe,A secure box in a hotel room for valuables
+balcony,A small outdoor space connected to a room
+view,The scenery visible from a room
+ocean view,A room with a view of the ocean
+city view,A room with a view of the city
+mountain view,A room with a view of the mountains
+late arrival,Checking in to a hotel after regular hours
+early check-in,Entering a hotel before the usual time
+lost and found,A place where lost items are kept
+key card,A plastic card used to open a hotel room
+luggage storage,A service where bags can be kept securely
+wake-up call,A phone call requested to wake up a guest
+receptionist,A hotel employee at the front desk
+porter,A person who carries luggage
+valet,A hotel worker who parks guests’ cars
+bellhop,A person who assists guests with luggage
+doorman,A hotel staff member who opens doors and greets guests
+host,A person who welcomes guests
+guest,A person staying at a hotel or visiting
+VIP,A very important person with special privileges
+lounge,A comfortable public waiting area
+spa,A place offering relaxation and beauty treatments
+massage,A treatment involving the rubbing of muscles
+sauna,A hot room for relaxation and sweating
+steam room,A room filled with hot steam for relaxation
+pool,A swimming facility
+gym,A place for exercise
+fitness center,A facility for physical training
+jacuzzi,A hot tub with water jets
+hot spring,A natural pool of hot mineral water
+resort fee,An extra charge at hotels for additional services
+city tax,A local tax added to hotel bills
+tour,A guided trip to a place of interest
+excursion,A short journey, usually for leisure
+day trip,A short trip completed within one day
+sightseeing,The activity of visiting interesting places
+walking tour,A guided tour on foot
+bus tour,A guided tour using a bus
+guided tour,A tour with an expert providing information
+self-guided tour,A tour without a guide, using maps or apps
+package tour,A trip sold as a bundle of transport, hotel, and activities
+group tour,A trip organized for multiple people together
+solo travel,Traveling alone
+family trip,A vacation with family members
+honeymoon,A vacation taken by newlyweds
+adventure travel,Trips focused on exploration or exciting activities
+eco-tourism,Tourism that focuses on the environment and sustainability
+cultural tourism,Travel to experience another culture
+volunteer travel,Trips where people help communities while traveling
+business trip,A journey made for work purposes
+conference,A formal meeting for discussion, often business-related
+seminar,A meeting for training or education
+workshop,A small group meeting for learning
+trade fair,A large exhibition for businesses
+exhibition,A public show of art, products, or ideas
+meeting,A gathering of people for discussion
+networking,Interacting with others for professional purposes
+destination,A place chosen for travel
+tourism,The business of attracting and accommodating travelers
+travel agency,A business that arranges travel for clients
+travel agent,A person who arranges trips for clients
+brochure,A small book or leaflet with travel information
+flyer,A single-sheet advertisement for travel
+advertisement,A notice promoting travel services
+promotion,A marketing activity to encourage sales
+discount,A reduction in price
+offer,A special travel deal
+deal,A travel package at a reduced price
+last-minute deal,A travel offer close to the departure date
+early bird discount,A discount for booking in advance
+peak season,The busiest time for travel
+off-season,A less popular time to travel
+shoulder season,The time between peak and off-season
+high season,The time when prices and demand are highest
+low season,The time when prices and demand are lowest
+holiday,A day of celebration or rest
+vacation,A period of leisure away from work
+getaway,A short trip for relaxation
+weekend trip,A vacation taken over a weekend
+long-haul flight,A flight over a very long distance
+short-haul flight,A flight over a short distance
+domestic flight,A flight within the same country
+international flight,A flight between different countries
+charter flight,A flight booked for a specific group or purpose
+direct flight,A flight without any stops
+connecting flight,A flight that requires changing planes
+stopover,A planned stop at an airport before continuing a journey
+boarding,The process of getting onto an airplane
+disembarkation,The process of leaving an airplane or ship
+crew,The staff working on an airplane, ship, or train
+pilot,A person who operates an aircraft
+co-pilot,The second pilot assisting the captain
+flight attendant,A staff member who helps passengers on a plane
+captain,The person in command of a ship or aircraft
+safety demonstration,An explanation of emergency procedures on a flight
+oxygen mask,A device that provides air in case of emergency
+life vest,A flotation device worn for safety in water
+emergency exit,A special door for leaving quickly in an emergency
+runway,A strip of land where planes take off and land
+control tower,A building that directs airport traffic
+hangar,A building where aircraft are stored
+terminal shuttle,A bus transporting passengers between terminals
+immigration officer,An official checking passports and visas
+customs declaration,A form listing goods brought into a country
+duty-free,Goods sold without certain taxes at airports
+arrival hall,The area where passengers arrive
+departure hall,The area where passengers leave
+information desk,A place where travelers can ask questions
+lost luggage,Bags that do not arrive at the destination
+found luggage,Bags that are returned after being lost
+overhead compartment,The storage space above airplane seats
+tray table,A foldable table on the back of a seat
+seat assignment,The allocation of a specific seat to a passenger
+aisle,The walkway between airplane or bus seats
+window,The glass opening to look outside
+reclining seat,A seat that can tilt backward
+first class,The most luxurious seating section on a plane
+business class,A seating section with extra comfort for business travelers
+economy class,The standard seating on an airplane
+upgrade,A change to a better travel class
+standby,Waiting for an available seat on a plane
+overbooked,When more tickets are sold than seats available
+gate agent,An airline worker handling boarding
+check-in counter,A desk where passengers register before flights
+boarding time,The time passengers get onto a plane
+departure time,The scheduled time a plane leaves
+arrival time,The scheduled time a plane lands
+flight number,The unique number identifying a flight
+airfare,The cost of a plane ticket
+ticket,A document showing travel rights
+one-way ticket,A ticket valid for travel in one direction
+round-trip ticket,A ticket valid for both going and returning
+open ticket,A ticket without a fixed date
+standby ticket,A ticket valid only if space is available
+paper ticket,A printed travel document
+e-ticket,A digital travel document
+confirmation number,A code verifying a booking
+reference number,A code used for identifying a booking
+travel insurance,Protection against unexpected travel problems
+medical insurance,Coverage for health costs while traveling
+lost luggage insurance,Coverage for missing baggage
+trip cancellation insurance,Coverage if a trip is canceled
+emergency contact,A person to call in case of travel emergency
+emergency number,A phone number used for urgent help
+consulate,A government office abroad helping citizens
+foreign exchange,A place to change money between currencies
+money changer,A business that exchanges cash
+traveler’s check,A preprinted check used as money
+budget airline,A low-cost airline
+flag carrier,The main airline of a country
+airline alliance,A group of airlines working together
+codeshare flight,A flight operated by two airlines
+frequent flyer,A traveler who often flies with the same airline
+loyalty program,A system that rewards frequent travelers
+mileage points,Credits earned by traveling
+redeem points,To use collected points for rewards
+upgrade voucher,A coupon allowing seat upgrades
+priority boarding,The right to board before other passengers
+fast track,A quicker route through security or immigration
+immigration queue,A line of passengers waiting for entry checks
+security line,A line of passengers waiting for inspection
+metal detector,A machine detecting metallic objects
+x-ray machine,A machine used to scan bags
+body scanner,A machine used to scan passengers
+pat-down,A manual security inspection
+baggage scanner,A machine to check luggage contents
+prohibited items,Objects not allowed on flights
+hand luggage,Small bags carried into the plane
+checked luggage,Bags stored in the airplane hold
+baggage tag,A label placed on luggage
+luggage trolley,A cart for carrying luggage
+porter service,A service for carrying bags
+carousel,A moving belt where luggage is collected
+delayed baggage,Luggage that arrives late
+damaged baggage,Luggage that is broken
+lost property,A department for missing items
+travel app,A mobile application for travelers
+translation app,An app for understanding different languages
+map app,An app for navigation
+ride-hailing app,An app for booking cars or taxis
+weather app,An app showing weather conditions
+currency converter,An app for checking exchange rates
+travel blog,A website sharing travel experiences
+travel vlog,A video blog about traveling
+photo spot,A place popular for taking pictures
+selfie,A photo taken by oneself
+camera,A device for taking photos
+tripod,A stand used to hold a camera
+drone,A flying device used for aerial photos
+power bank,A portable charger for electronic devices
+adapter,A device to connect plugs in different countries
+voltage converter,A device changing electricity to correct level
+Wi-Fi,A wireless internet connection
+SIM card,A chip used for phone service
+roaming,Using mobile service abroad
+international call,A phone call made between different countries
+local call,A phone call within the same area
+prepaid card,A card loaded with money for phone or travel
+data plan,A service package for mobile internet
+charging station,A place to charge electronic devices
+electric outlet,A socket for plugging in electronics
+universal adapter,A plug that fits many socket types
+power strip,A device with multiple sockets
+locker,A small storage unit for valuables
+cloakroom,A place to leave coats or luggage
+left luggage office,A place to store bags temporarily
+information center,A place offering details for visitors
+tourist office,A local center with maps and guides
+brochure rack,A stand displaying information leaflets
+map stand,A place with free or paid maps
+signpost,A board giving directions
+street sign,A sign showing road names
+exit sign,A sign showing how to leave
+emergency exit sign,A marker showing safety exits
+restroom,A public toilet facility
+toilet,A bathroom facility
+public restroom,A shared toilet facility
+hand dryer,A machine for drying hands
+soap dispenser,A container for liquid soap
+water fountain,A machine providing drinking water
+drinking water,Water that is safe to drink
+bottle refill station,A machine for filling water bottles
+pharmacy,A store selling medicine
+clinic,A place for minor medical treatment
+hospital,A place providing medical care
+emergency room,A hospital department for urgent cases
+ambulance,A vehicle for transporting sick people
+first aid kit,A box containing medical supplies
+prescription,A written order for medicine
+medicine,A drug used for treatment
+painkiller,A medicine that reduces pain
+bandage,A strip of cloth for covering wounds
+plaster,A small bandage for cuts
+thermometer,A device measuring body temperature
+vaccine,A shot preventing illness
+allergy,A negative reaction to substances
+insurance card,A card proving health coverage
+doctor,A person trained in medicine
+nurse,A healthcare professional assisting patients
+patient,A person receiving medical treatment
+clinic hours,The opening times of a medical center
+appointment,A scheduled meeting with a doctor
+health declaration,A form about medical conditions
+quarantine,A period of isolation for health reasons
+emergency contact number,A phone number for urgent cases
+police,A public security force
+police station,A building where police work
+officer,A member of the police
+patrol,A police activity checking areas
+crime,A violation of the law
+theft,The act of stealing
+pickpocket,A thief who steals from pockets
+scam,A trick to cheat travelers
+fraud,An act of deception for gain
+emergency,A sudden dangerous situation
+firefighter,A person trained to fight fires
+fire station,A place where fire trucks are kept
+fire extinguisher,A device used to put out fire
+alarm,A sound or signal warning of danger
+evacuation,The process of leaving a dangerous place
+shelter,A place giving protection
+safe zone,A designated secure area
+lost child,A missing child situation
+help desk,A place offering assistance
+security guard,A person hired to protect
+checkpoint,A place where travelers are inspected
+border crossing,A place to pass between countries
+fence,A barrier marking boundaries
+embassy staff,Workers at an embassy
+diplomat,A government representative abroad
+visa application,The process of requesting entry permission
+visa extension,The process of prolonging a stay
+entry stamp,A mark placed in a passport upon entry
+exit stamp,A mark placed in a passport upon leaving
+work permit,Permission to work in another country
+student visa,Permission to study abroad
+tourist visa,Permission to visit a country
+transit visa,Permission to pass through a country
+multiple-entry visa,Permission to enter a country many times
+single-entry visa,Permission to enter a country once
+consular services,Assistance offered by a consulate
+travel restriction,Rules limiting travel
+border control,The authority regulating entry to a country
+customs officer,A person who checks luggage at borders
+baggage allowance,The maximum luggage weight permitted
+excess baggage,When luggage is over the weight limit
+weight limit,The maximum weight allowed
+carry-on allowance,The limit of hand luggage
+prohibited goods,Items not allowed to enter a country
+duty tax,A fee on imported goods
+goods declaration,A form listing imported items
+quarantine inspection,Checking animals or food entering a country
+pet passport,A document allowing animals to travel
+animal quarantine,A facility to isolate animals
+vaccination certificate,Proof of animal or human vaccination
+health check,A review of medical condition
+green channel,Customs line for nothing to declare
+red channel,Customs line for items to declare
+nothing to declare,A status at customs when carrying no restricted goods
+declare items,To officially state goods being brought into a country
+inspection,The process of checking bags and documents
+scanner,A machine used to check luggage or people
+checkpoint line,A queue for inspection at borders
+boarding gate,The entry point to get on a plane
+departure board,An electronic screen showing flight times
+arrival board,An electronic screen showing arrivals
+information board,A sign with schedules or directions
+announcement,A public message over loudspeakers
+public address system,A system for announcements
+waiting area,A place for travelers to sit before departure
+seating area,A designated place with chairs
+priority seat,A seat reserved for elderly or disabled
+special assistance,Help offered to those with mobility needs
+wheelchair,A chair with wheels for mobility
+accessible entrance,A doorway for wheelchairs or disabled access
+elevator,A lift that moves people between floors
+escalator,A moving staircase
+moving walkway,A conveyor belt for walking in airports
+stairs,Steps used for moving between floors
+parking lot,An outdoor area for vehicles
+parking garage,A building for parking vehicles
+valet parking,A service where staff park cars
+car park,Another term for parking lot
+toll road,A road requiring payment
+highway,A main road connecting cities
+expressway,A high-speed road
+freeway,A road without tolls
+roundabout,A circular road junction
+intersection,A place where roads cross
+traffic light,A signal controlling road traffic
+pedestrian crossing,A designated place for people to cross
+sidewalk,A path beside a road for pedestrians
+footbridge,A bridge for people walking
+bike lane,A lane reserved for bicycles
+bus stop,A designated place where buses pick up passengers
+train station,A place where trains stop for passengers
+platform,A raised area where passengers wait for trains
+ticket office,A counter selling tickets
+ticket machine,A machine for buying tickets
+departure board (train),A screen showing train departures
+arrival board (train),A screen showing train arrivals
+railway track,The metal rails for trains
+carriage,A train compartment for passengers
+sleeper car,A train car with beds
+dining car,A train car serving food
+cabin,A private area in a train, ship, or plane
+ferry terminal,A building where ferries depart
+dock,A platform where ships load or unload
+pier,A structure extending into the water for boats
+cruise ship,A large ship for vacations
+yacht,A private boat for leisure
+sailboat,A boat powered by sails
+motorboat,A small boat powered by an engine
+canoe,A narrow boat paddled by hand
+kayak,A small boat for one or two people
+paddle,A tool used to move a canoe or kayak
+oar,A stick used for rowing a boat
+life jacket,A vest keeping a person afloat
+lifeboat,A small boat used in emergencies
+harbor master,The person in charge of a harbor
+fishing boat,A boat used for catching fish
+jet ski,A small watercraft for recreation
+surfboard,A board for riding waves
+windsurfing,A sport combining surfing and sailing
+scuba diving,Underwater diving with breathing equipment
+snorkeling,Swimming with a mask and snorkel
+beach umbrella,A large umbrella for shade at the beach
+beach towel,A towel used on the sand
+sunscreen,A lotion protecting skin from the sun
+sunglasses,Glasses that protect eyes from sunlight
+hat,A head covering for shade
+swimsuit,Clothing for swimming
+bikini,A two-piece swimsuit
+swim trunks,Shorts for swimming
+flip-flops,Light sandals for the beach
+sandcastle,A structure made of sand
+lifeguard,A person watching swimmers for safety
+rescue buoy,A floating device for saving people
+sunset,The time when the sun goes down
+sunrise,The time when the sun comes up
+horizon,The line where earth and sky meet
+compass,A device showing direction
+map coordinates,Numbers giving a location
+guide,A person who shows the way
+explorer,A person who travels to unknown places
+adventurer,A traveler seeking excitement
+expedition,A journey for exploration
+trek,A long and difficult journey on foot
+hike,A walk in the countryside
+trail,A marked path for walking
+campsite,A place where people camp
+tent,A portable shelter for camping
+sleeping bag,A warm bag for sleeping outdoors
+campfire,A fire built at a campsite
+flashlight,A handheld light
+lantern,A portable lamp
+backpack,A bag carried on the back
+canteen,A container for carrying water
+hiking boots,Strong shoes for walking
+compass rose,The symbol showing directions on a map
+binoculars,A tool for seeing distant objects
+mountaineering,The sport of climbing mountains
+climbing gear,Equipment used for climbing
+rope,A strong cord used in climbing
+helmet,Protective headwear
+gloves,Coverings for hands
+jacket,A piece of clothing for warmth
+raincoat,A coat that protects against rain
+umbrella,A handheld device for rain or sun
+weather forecast,A prediction of weather
+storm,A violent weather condition
+thunder,A loud noise during a storm
+lightning,A flash of light during a storm
+rain,Water falling from clouds
+snow,Frozen water falling as flakes
+hail,Small balls of ice falling from the sky
+fog,Thick mist reducing visibility
+wind,Air moving across the surface
+temperature,A measure of heat or cold
+climate,The usual weather of an area
+season,One of four parts of the year
+spring,The season between winter and summer
+summer,The warmest season
+autumn,The season between summer and winter
+winter,The coldest season
