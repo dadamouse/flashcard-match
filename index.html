@@ -154,7 +154,7 @@
     let allWords = [];
     let pool = [];
     let activeWords = [];
-    const MAX_ACTIVE = 5; // ✅ 只顯示 5 組
+    const MAX_ACTIVE = 5; // ✅ 只顯示 6 組
 
     let score = 0;
     let isMuted = false;
@@ -250,14 +250,26 @@
         updateScore(10);
         speakWord(enWordLeft);
 
-        // 從牌面移除
         activeWords = activeWords.filter(w => w.en !== enWordLeft);
         leftSelected.remove();
         rightSelected.remove();
         completed++;
 
-        // 如果池子還有新題目，補一組上來
-        if (pool.length > 0) {
+        // 延遲 30 秒後再回到池子
+        setTimeout(() => {
+          const wordObj = allWords.find(w => w.en === enWordLeft);
+          if (wordObj) {
+            pool.push(wordObj);
+            if (activeWords.length < MAX_ACTIVE && pool.length > 0) {
+              const newWord = pool.shift();
+              activeWords.push(newWord);
+              renderBoard();
+            }
+          }
+        }, 30000);
+
+        // 如果還有新題目，馬上補到 6 個
+        if (pool.length > 0 && activeWords.length < MAX_ACTIVE) {
           const newWord = pool.shift();
           activeWords.push(newWord);
         }
@@ -271,30 +283,15 @@
         updateProgress();
 
       } else {
-        // ❌ 配對錯誤
+        // ❌ 配對錯誤，只扣分，不移除
         updateScore(-2);
 
-        const wrongWord = activeWords.find(w => w.en === enWordLeft);
-
-        // 取消選擇樣式
         const l = leftSelected;
         const r = rightSelected;
         setTimeout(() => {
           if (l) l.classList.remove("selected");
           if (r) r.classList.remove("selected");
         }, 400);
-
-        // 暫時移除錯的組合
-        activeWords = activeWords.filter(w => w.en !== enWordLeft);
-        renderBoard();
-
-        // ⏱ 30 秒後再放回來
-        setTimeout(() => {
-          if (wrongWord) {
-            activeWords.push(wrongWord);
-            renderBoard();
-          }
-        }, 30000);
       }
 
       leftSelected = null;
