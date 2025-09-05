@@ -15,11 +15,26 @@
       align-items: center;
     }
 
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     h1 {
       font-size: 22px;
-      margin: 10px 0 5px;
+      margin: 0;
       color: #2c3e50;
-      text-align: center;
+    }
+
+    #muteBtn {
+      font-size: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     #score {
@@ -87,7 +102,11 @@
   </style>
 </head>
 <body>
-  <h1>Vocab Match</h1>
+  <header>
+    <h1>Vocab Match</h1>
+    <button id="muteBtn">🔊</button>
+  </header>
+
   <div id="score">Score: 0</div>
   <div id="game-board">
     <div id="left" class="column"></div>
@@ -96,13 +115,22 @@
   <div id="message"></div>
 
   <script>
-    let allWords = [];
-    let pool = [];
-    let activeWords = [];
-    const MAX_ACTIVE = 6;
+    // 🎯 只要 6 組單字
+    const allWords = [
+      { en: "Considering", zh: "考慮中" },
+      { en: "Wrangling", zh: "爭論中" },
+      { en: "Cogitating", zh: "深思中" },
+      { en: "Moseying", zh: "漫步中" },
+      { en: "Enchanting", zh: "迷人中" },
+      { en: "Processing", zh: "處理中" }
+    ];
 
+    let activeWords = [...allWords];
     let score = 0;
+    let isMuted = false;
+
     const scoreDisplay = document.getElementById("score");
+    const muteBtn = document.getElementById("muteBtn");
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
@@ -114,12 +142,6 @@
 
     let leftSelected = null;
     let rightSelected = null;
-
-    function initGame() {
-      pool = [...allWords];
-      activeWords = pool.splice(0, MAX_ACTIVE);
-      renderBoard();
-    }
 
     function renderBoard() {
       leftCol.innerHTML = "";
@@ -154,10 +176,11 @@
       scoreDisplay.innerText = "Score: " + score;
     }
 
-    // 🔊 發音功能
+    // 🔊 發音
     function speakWord(word) {
+      if (isMuted) return;
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = "en-US";   // 設定英文發音
+      utterance.lang = "en-US";
       speechSynthesis.speak(utterance);
     }
 
@@ -184,12 +207,12 @@
       const zhWord = rightSelected.dataset.zh;
 
       if (leftSelected.dataset.zh === zhWord) {
-        // ✅ 正確配對
+        // ✅ 正確
         updateScore(10);
         leftSelected.classList.add("matched");
         rightSelected.classList.add("matched");
 
-        // 🔊 播放英文單字
+        // 🔊 播音
         speakWord(enWord);
 
         setTimeout(() => {
@@ -197,12 +220,7 @@
           leftSelected.remove();
           rightSelected.remove();
 
-          if (pool.length > 0) {
-            const newWord = pool.shift();
-            activeWords.push(newWord);
-          }
-
-          if (activeWords.length === 0 && pool.length === 0) {
+          if (activeWords.length === 0) {
             message.innerText = "🎉 All matched! Final Score: " + score;
           } else {
             renderBoard();
@@ -210,7 +228,7 @@
         }, 400);
 
       } else {
-        // ❌ 錯誤 → 黃色恢復
+        // ❌ 錯誤
         updateScore(-2);
         const l = leftSelected;
         const r = rightSelected;
@@ -224,19 +242,14 @@
       rightSelected = null;
     }
 
-    // 🚀 從 english.txt 載入單字
-    fetch("english.txt")
-      .then(res => res.text())
-      .then(text => {
-        allWords = text.trim().split("\n").map(line => {
-          const [en, zh] = line.split(",");
-          return { en: en.trim(), zh: zh.trim() };
-        });
-        initGame();
-      })
-      .catch(err => {
-        console.error("讀取 english.txt 失敗", err);
-      });
+    // 🔇 音效開關
+    muteBtn.addEventListener("click", () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? "🔇" : "🔊";
+    });
+
+    // 🚀 開始遊戲
+    renderBoard();
   </script>
 </body>
 </html>
