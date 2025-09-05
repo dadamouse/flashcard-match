@@ -49,12 +49,18 @@
       border: 2px solid #a5d6a7;
       color: #2c3e50;
       font-size: 16px;
-      padding: 12px;
+      height: 55px;             /* ✅ 固定高度 */
+      display: flex;            /* ✅ 置中對齊 */
+      align-items: center;
+      justify-content: center;
       text-align: center;
       border-radius: 8px;
       cursor: pointer;
       transition: 0.25s;
       user-select: none;
+      white-space: nowrap;      /* ✅ 不換行 */
+      overflow: hidden;
+      text-overflow: ellipsis;  /* ✅ 太長自動 ... */
     }
 
     .card:hover {
@@ -196,15 +202,18 @@
         rightSelected.classList.add("matched");
 
         setTimeout(() => {
+          // 移除正確的
           activeWords = activeWords.filter(w => !(w.en === enWord && w.zh === zhWord));
           leftSelected.remove();
           rightSelected.remove();
 
+          // 從 pool 補新單字
           if (pool.length > 0) {
             const newWord = pool.shift();
             activeWords.push(newWord);
           }
 
+          // 判斷遊戲結束
           if (activeWords.length === 0 && pool.length === 0) {
             message.innerText = "🎉 All matched! Final Score: " + score;
           } else {
@@ -213,7 +222,7 @@
         }, 400);
 
       } else {
-        // ❌ 錯誤 → 移除黃色，恢復原狀
+        // ❌ 錯誤 → 黃色恢復
         updateScore(-2);
         const l = leftSelected;
         const r = rightSelected;
