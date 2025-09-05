@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Vocab Match</title>
+  <title>Travel Vocab Match</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -17,7 +17,7 @@
 
     header {
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -48,7 +48,7 @@
       display: flex;
       justify-content: center;
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       gap: 20px;
     }
 
@@ -63,8 +63,8 @@
       background: #e8f5e9;
       border: 2px solid #a5d6a7;
       color: #2c3e50;
-      font-size: 16px;
-      height: 55px;
+      font-size: 14px;
+      height: 70px;             /* ✅ 固定高度 */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -73,9 +73,12 @@
       cursor: pointer;
       transition: 0.25s;
       user-select: none;
-      white-space: nowrap;
+      padding: 5px;
+
+      /* ✅ 允許換行，不會跑版 */
+      white-space: normal;
+      word-wrap: break-word;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .card:hover {
@@ -103,7 +106,7 @@
 </head>
 <body>
   <header>
-    <h1>Vocab Match</h1>
+    <h1>Travel Vocab Match</h1>
     <button id="muteBtn">🔊</button>
   </header>
 
@@ -115,17 +118,11 @@
   <div id="message"></div>
 
   <script>
-    // 🎯 固定 6 組單字
-    const allWords = [
-      { en: "Considering", zh: "考慮中" },
-      { en: "Wrangling", zh: "爭論中" },
-      { en: "Cogitating", zh: "深思中" },
-      { en: "Moseying", zh: "漫步中" },
-      { en: "Enchanting", zh: "迷人中" },
-      { en: "Processing", zh: "處理中" }
-    ];
+    let allWords = [];
+    let pool = [];
+    let activeWords = [];
+    const MAX_ACTIVE = 10;
 
-    let remainingWords = [...allWords]; // 尚未完成的單字
     let score = 0;
     let isMuted = false;
     let replenishTimer = null;
@@ -147,15 +144,15 @@
       leftCol.innerHTML = "";
       rightCol.innerHTML = "";
 
-      const leftCards = shuffle([...remainingWords]);
-      const rightCards = shuffle([...remainingWords]);
+      const leftCards = shuffle([...activeWords]);
+      const rightCards = shuffle([...activeWords]);
 
       leftCards.forEach(w => {
         const card = document.createElement("div");
         card.classList.add("card");
         card.innerText = w.en;
         card.dataset.en = w.en;
-        card.dataset.zh = w.zh;
+        card.dataset.def = w.def;
         card.addEventListener("click", () => selectCard(card, "left"));
         leftCol.appendChild(card);
       });
@@ -163,9 +160,9 @@
       rightCards.forEach(w => {
         const card = document.createElement("div");
         card.classList.add("card");
-        card.innerText = w.zh;
+        card.innerText = w.def;
         card.dataset.en = w.en;
-        card.dataset.zh = w.zh;
+        card.dataset.def = w.def;
         card.addEventListener("click", () => selectCard(card, "right"));
         rightCol.appendChild(card);
       });
@@ -176,7 +173,6 @@
       scoreDisplay.innerText = "Score: " + score;
     }
 
-    // 🔊 發音
     function speakWord(word) {
       if (isMuted) return;
       const utterance = new SpeechSynthesisUtterance(word);
@@ -204,23 +200,24 @@
 
     function checkMatch() {
       const enWord = leftSelected.dataset.en;
-      const zhWord = rightSelected.dataset.zh;
+      const defWord = rightSelected.dataset.def;
 
-      if (leftSelected.dataset.zh === zhWord) {
-        // ✅ 正確
+      if (leftSelected.dataset.def === defWord) {
         updateScore(10);
         speakWord(enWord);
 
-        // 從剩餘題庫移除
-        remainingWords = remainingWords.filter(w => !(w.en === enWord && w.zh === zhWord));
-
+        pool = pool.filter(w => !(w.en === enWord));
         leftSelected.remove();
         rightSelected.remove();
 
-        // 🕑 延遲 1 秒再補齊
         if (replenishTimer) clearTimeout(replenishTimer);
         replenishTimer = setTimeout(() => {
-          if (remainingWords.length === 0) {
+          activeWords = activeWords.filter(w => w.en !== enWord);
+          if (pool.length > 0) {
+            const newWord = pool.shift();
+            activeWords.push(newWord);
+          }
+          if (activeWords.length === 0 && pool.length === 0) {
             message.innerText = "🎉 All matched! Final Score: " + score;
           } else {
             renderBoard();
@@ -228,7 +225,6 @@
         }, 1000);
 
       } else {
-        // ❌ 錯誤
         updateScore(-2);
         const l = leftSelected;
         const r = rightSelected;
@@ -242,14 +238,26 @@
       rightSelected = null;
     }
 
-    // 🔇 音效開關
     muteBtn.addEventListener("click", () => {
       isMuted = !isMuted;
       muteBtn.textContent = isMuted ? "🔇" : "🔊";
     });
 
-    // 🚀 開始遊戲
-    renderBoard();
+    // 🚀 載入單字檔
+    fetch("travel_words.txt")
+      .then(res => res.text())
+      .then(text => {
+        allWords = text.trim().split("\n").map(line => {
+          const [en, def] = line.split(",");
+          return { en: en.trim(), def: def.trim() };
+        });
+        pool = [...allWords];
+        activeWords = pool.splice(0, MAX_ACTIVE);
+        renderBoard();
+      })
+      .catch(err => {
+        console.error("讀取 travel_words.txt 失敗", err);
+      });
   </script>
 </body>
 </html>
