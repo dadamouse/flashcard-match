@@ -213,11 +213,13 @@
         }, 400);
 
       } else {
-        // ❌ 錯誤 → 還原成沒選
+        // ❌ 錯誤 → 移除黃色，恢復原狀
         updateScore(-2);
+        const l = leftSelected;
+        const r = rightSelected;
         setTimeout(() => {
-          leftSelected.classList.remove("selected");
-          rightSelected.classList.remove("selected");
+          if (l) l.classList.remove("selected");
+          if (r) r.classList.remove("selected");
         }, 400);
       }
 
