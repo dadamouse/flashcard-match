@@ -128,11 +128,10 @@
     let allWords = [];
     let pool = [];
     let activeWords = [];
-    const MAX_ACTIVE = 6;
+    const MAX_ACTIVE = 6; // ✅ 只顯示 6 組
 
     let score = 0;
     let isMuted = false;
-    let replenishTimer = null;
 
     const scoreDisplay = document.getElementById("score");
     const muteBtn = document.getElementById("muteBtn");
@@ -146,33 +145,6 @@
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
-    }
-
-    function saveProgress() {
-      const progress = {
-        score,
-        pool,
-        activeWords
-      };
-      localStorage.setItem("travelVocabProgress", JSON.stringify(progress));
-    }
-
-    function loadProgress() {
-      const saved = localStorage.getItem("travelVocabProgress");
-      if (saved) {
-        try {
-          const { score: s, pool: p, activeWords: a } = JSON.parse(saved);
-          score = s;
-          pool = p;
-          activeWords = a;
-          scoreDisplay.innerText = "Score: " + score;
-          return true;
-        } catch (e) {
-          console.error("載入進度失敗", e);
-          return false;
-        }
-      }
-      return false;
     }
 
     function renderBoard() {
@@ -206,7 +178,6 @@
     function updateScore(points) {
       score += points;
       scoreDisplay.innerText = "Score: " + score;
-      saveProgress();
     }
 
     function speakWord(word) {
@@ -239,36 +210,52 @@
       const enWordRight = rightSelected.dataset.en;
 
       if (enWordLeft === enWordRight) {
+        // ✅ 配對正確
         updateScore(10);
         speakWord(enWordLeft);
 
-        pool = pool.filter(w => !(w.en === enWordLeft));
+        // 從牌面移除
+        activeWords = activeWords.filter(w => w.en !== enWordLeft);
         leftSelected.remove();
         rightSelected.remove();
 
-        if (replenishTimer) clearTimeout(replenishTimer);
-        replenishTimer = setTimeout(() => {
-          activeWords = activeWords.filter(w => w.en !== enWordLeft);
-          if (pool.length > 0) {
-            const newWord = pool.shift();
-            activeWords.push(newWord);
-          }
-          if (activeWords.length === 0 && pool.length === 0) {
-            message.innerText = "🎉 All matched! Final Score: " + score;
-          } else {
-            renderBoard();
-          }
-          saveProgress();
-        }, 1000);
+        // 如果池子還有新題目，補一組上來
+        if (pool.length > 0) {
+          const newWord = pool.shift();
+          activeWords.push(newWord);
+        }
+
+        if (activeWords.length === 0 && pool.length === 0) {
+          message.innerText = `🎉 All matched! Final Score: ${score}`;
+        } else {
+          renderBoard();
+        }
 
       } else {
+        // ❌ 配對錯誤
         updateScore(-2);
+
+        const wrongWord = activeWords.find(w => w.en === enWordLeft);
+
+        // 取消選擇樣式
         const l = leftSelected;
         const r = rightSelected;
         setTimeout(() => {
           if (l) l.classList.remove("selected");
           if (r) r.classList.remove("selected");
         }, 400);
+
+        // 暫時移除錯的組合
+        activeWords = activeWords.filter(w => w.en !== enWordLeft);
+        renderBoard();
+
+        // ⏱ 30 秒後再放回來
+        setTimeout(() => {
+          if (wrongWord) {
+            activeWords.push(wrongWord);
+            renderBoard();
+          }
+        }, 30000);
       }
 
       leftSelected = null;
@@ -281,8 +268,7 @@
     });
 
     replayBtn.addEventListener("click", () => {
-      localStorage.removeItem("travelVocabProgress");
-      location.reload(); // 重新載入頁面
+      location.reload();
     });
 
     // 🚀 初始化
@@ -293,12 +279,8 @@
           const [en, def] = line.split(",");
           return { en: en.trim(), def: def.trim() };
         });
-
-        if (!loadProgress()) {
-          pool = [...allWords];
-          activeWords = pool.splice(0, MAX_ACTIVE);
-        }
-
+        pool = [...allWords];
+        activeWords = pool.splice(0, MAX_ACTIVE);
         renderBoard();
       })
       .catch(err => {
