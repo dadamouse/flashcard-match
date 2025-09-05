@@ -154,7 +154,8 @@
     let allWords = [];
     let pool = [];
     let activeWords = [];
-    const MAX_ACTIVE = 5; // ✅ 只顯示 6 組
+    const MAX_ACTIVE = 6;
+    const REQUIRED_CORRECT = 3; // ✅ 每個單字需答對 3 次
 
     let score = 0;
     let isMuted = false;
@@ -173,8 +174,39 @@
     let leftSelected = null;
     let rightSelected = null;
 
+    // ===== Helper =====
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
+    }
+
+    function saveProgress() {
+      localStorage.setItem("travelVocabProgress", JSON.stringify({
+        allWords,
+        pool,
+        activeWords,
+        score,
+        completed
+      }));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem("travelVocabProgress");
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          allWords = data.allWords;
+          pool = data.pool;
+          activeWords = data.activeWords;
+          score = data.score;
+          completed = data.completed;
+          scoreDisplay.innerText = "Score: " + score;
+          updateProgress();
+          return true;
+        } catch (e) {
+          console.error("載入進度失敗", e);
+        }
+      }
+      return false;
     }
 
     function renderBoard() {
@@ -208,12 +240,14 @@
     function updateScore(points) {
       score += points;
       scoreDisplay.innerText = "Score: " + score;
+      saveProgress();
     }
 
     function updateProgress() {
       progressText.innerText = `Completed: ${completed} / ${allWords.length}`;
       const percent = (completed / allWords.length) * 100;
       progressFill.style.width = percent + "%";
+      saveProgress();
     }
 
     function speakWord(word) {
@@ -246,36 +280,39 @@
       const enWordRight = rightSelected.dataset.en;
 
       if (enWordLeft === enWordRight) {
-        // ✅ 配對正確
+        // ✅ 正確
         updateScore(10);
         speakWord(enWordLeft);
+
+        const wordObj = allWords.find(w => w.en === enWordLeft);
+        wordObj.correctCount = (wordObj.correctCount || 0) + 1;
 
         activeWords = activeWords.filter(w => w.en !== enWordLeft);
         leftSelected.remove();
         rightSelected.remove();
-        completed++;
 
-        // 延遲 30 秒後再回到池子
-        setTimeout(() => {
-          const wordObj = allWords.find(w => w.en === enWordLeft);
-          if (wordObj) {
+        if (wordObj.correctCount >= REQUIRED_CORRECT) {
+          completed++;
+        } else {
+          // 30 秒後再回來
+          setTimeout(() => {
             pool.push(wordObj);
             if (activeWords.length < MAX_ACTIVE && pool.length > 0) {
               const newWord = pool.shift();
               activeWords.push(newWord);
               renderBoard();
+              saveProgress();
             }
-          }
-        }, 30000);
+          }, 30000);
+        }
 
-        // 如果還有新題目，馬上補到 6 個
         if (pool.length > 0 && activeWords.length < MAX_ACTIVE) {
           const newWord = pool.shift();
           activeWords.push(newWord);
         }
 
         if (activeWords.length === 0 && pool.length === 0) {
-          message.innerText = `🎉 All matched! Final Score: ${score}`;
+          message.innerText = `🎉 All matched (3x)! Final Score: ${score}`;
         } else {
           renderBoard();
         }
@@ -283,9 +320,8 @@
         updateProgress();
 
       } else {
-        // ❌ 配對錯誤，只扣分，不移除
+        // ❌ 錯誤，只扣分，不移除
         updateScore(-2);
-
         const l = leftSelected;
         const r = rightSelected;
         setTimeout(() => {
@@ -296,27 +332,33 @@
 
       leftSelected = null;
       rightSelected = null;
+      saveProgress();
     }
 
+    // ===== Buttons =====
     muteBtn.addEventListener("click", () => {
       isMuted = !isMuted;
       muteBtn.textContent = isMuted ? "🔇" : "🔊";
     });
 
     replayBtn.addEventListener("click", () => {
+      localStorage.removeItem("travelVocabProgress");
       location.reload();
     });
 
-    // 🚀 初始化
+    // ===== Init =====
     fetch("travel_words.txt")
       .then(res => res.text())
       .then(text => {
-        allWords = text.trim().split("\n").map(line => {
-          const [en, def] = line.split(",");
-          return { en: en.trim(), def: def.trim() };
-        });
-        pool = [...allWords];
-        activeWords = pool.splice(0, MAX_ACTIVE);
+        if (!loadProgress()) {
+          allWords = text.trim().split("\n").map(line => {
+            const [en, def] = line.split(",");
+            return { en: en.trim(), def: def.trim(), correctCount: 0 };
+          });
+          pool = [...allWords];
+          activeWords = pool.splice(0, MAX_ACTIVE);
+          completed = 0;
+        }
         renderBoard();
         updateProgress();
       })
