@@ -44,9 +44,32 @@
 
     #score {
       font-size: 18px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: #00796b;
       font-weight: bold;
+    }
+
+    #progressText {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    #progressBar {
+      width: 100%;
+      max-width: 800px;
+      height: 15px;
+      background: #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    #progressFill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #66bb6a, #43a047);
+      transition: width 0.3s;
     }
 
     #game-board {
@@ -118,6 +141,9 @@
   </header>
 
   <div id="score">Score: 0</div>
+  <div id="progressText">Completed: 0 / 0</div>
+  <div id="progressBar"><div id="progressFill"></div></div>
+
   <div id="game-board">
     <div id="left" class="column"></div>
     <div id="right" class="column"></div>
@@ -132,6 +158,7 @@
 
     let score = 0;
     let isMuted = false;
+    let completed = 0;
 
     const scoreDisplay = document.getElementById("score");
     const muteBtn = document.getElementById("muteBtn");
@@ -139,6 +166,9 @@
     const leftCol = document.getElementById("left");
     const rightCol = document.getElementById("right");
     const message = document.getElementById("message");
+
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
 
     let leftSelected = null;
     let rightSelected = null;
@@ -180,6 +210,12 @@
       scoreDisplay.innerText = "Score: " + score;
     }
 
+    function updateProgress() {
+      progressText.innerText = `Completed: ${completed} / ${allWords.length}`;
+      const percent = (completed / allWords.length) * 100;
+      progressFill.style.width = percent + "%";
+    }
+
     function speakWord(word) {
       if (isMuted) return;
       const utterance = new SpeechSynthesisUtterance(word);
@@ -218,6 +254,7 @@
         activeWords = activeWords.filter(w => w.en !== enWordLeft);
         leftSelected.remove();
         rightSelected.remove();
+        completed++;
 
         // 如果池子還有新題目，補一組上來
         if (pool.length > 0) {
@@ -230,6 +267,8 @@
         } else {
           renderBoard();
         }
+
+        updateProgress();
 
       } else {
         // ❌ 配對錯誤
@@ -282,6 +321,7 @@
         pool = [...allWords];
         activeWords = pool.splice(0, MAX_ACTIVE);
         renderBoard();
+        updateProgress();
       })
       .catch(err => {
         console.error("讀取 travel_words.txt 失敗", err);
