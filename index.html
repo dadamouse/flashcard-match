@@ -99,7 +99,7 @@
     let allWords = [];
     let pool = [];
     let activeWords = [];
-    const MAX_ACTIVE = 6;
+    const MAX_ACTIVE = 10;
 
     let score = 0;
     const scoreDisplay = document.getElementById("score");
@@ -154,6 +154,13 @@
       scoreDisplay.innerText = "Score: " + score;
     }
 
+    // 🔊 發音功能
+    function speakWord(word) {
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = "en-US";   // 設定英文發音
+      speechSynthesis.speak(utterance);
+    }
+
     function selectCard(card, side) {
       if (card.classList.contains("matched")) return;
 
@@ -181,6 +188,9 @@
         updateScore(10);
         leftSelected.classList.add("matched");
         rightSelected.classList.add("matched");
+
+        // 🔊 播放英文單字
+        speakWord(enWord);
 
         setTimeout(() => {
           activeWords = activeWords.filter(w => !(w.en === enWord && w.zh === zhWord));
